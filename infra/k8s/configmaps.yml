@@ -12,5 +12,7 @@ data:
   SENDGRID_RESET_TEMPLATEID: "d-wefiniwnef1ewf848erg18er8"
   AWS_BUCKET_NAME: "mybucket"
   AWS_BUCKET_REGION: " ap-south-1"
+  NODE_ENV: "production"
+
 
 
