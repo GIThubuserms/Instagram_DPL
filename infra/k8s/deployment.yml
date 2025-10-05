@@ -1,28 +1,48 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata: 
-    namespace: instanm
-    name: instadpl
+  namespace: instanm
+  name: instadpl
 spec:   
-    replicas: 2
-    selector:
-        matchLabels:
-            app: insta
-    template:
-        metadata:   
-            name: instapod
-            labels:  
-                app: insta
-        spec:
-            containers:
-                - name: instacon
-                  image: 
-                  envFrom:
-                    - configMapRef:
-                        name: my-config
-                    - secretRef:
-                        name: my-secret
-                  ports:
-                    - containerPort: 4000
-                    
-    
+  replicas: 2
+  selector:
+    matchLabels:
+      app: insta
+  template:
+    metadata:   
+      name: instapod
+      labels:  
+        app: insta
+    spec:
+      containers:
+        - name: instacon
+          image: murtaza0318/insta_clone:latest
+          envFrom:
+            - configMapRef:
+                name: my-config
+          env:
+            - name: AWS_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_BUCKET_NAME
+
+            - name: AWS_BUCKET_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_BUCKET_REGION
+
+            - name: AWS_IAM_USER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_IAM_USER_SECRET
+
+            - name: AWS_IAM_USER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_IAM_USER_KEY
+          ports:
+            - containerPort: 4000
