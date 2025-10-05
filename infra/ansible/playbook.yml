@@ -98,3 +98,13 @@
       service:
         name: jenkins
         state: restarted
+
+    - name: Create Kind cluster if not exists
+      shell: |
+        if ! kind get clusters | grep -q insta-cluster; then
+          kind create cluster --name insta-cluster
+        else
+          echo "Kind cluster already exists."
+        fi
+      args:
+        executable: /bin/bash

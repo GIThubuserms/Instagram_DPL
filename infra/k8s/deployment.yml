@@ -16,13 +16,13 @@ spec:
         spec:
             containers:
                 - name: instacon
-                  image: docker/murtaza0318/node:18
+                  image: 
                   envFrom:
                     - configMapRef:
                         name: my-config
                     - secretRef:
                         name: my-secret
                   ports:
-                    - containerPort: 80
+                    - containerPort: 4000
                     
     
