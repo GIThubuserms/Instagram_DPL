@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT,"0.0.0.0",() => {
     console.log(`Server Running on http://localhost:${PORT}`);
 });
 
