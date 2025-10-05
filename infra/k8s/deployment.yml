@@ -20,31 +20,29 @@ spec:
           envFrom:
             - configMapRef:
                 name: my-config
-            - secretKeyRef:
-                name: my-secret
-        #   env:
-        #     - name: AWS_BUCKET_NAME
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: my-secret
-        #           key: AWS_BUCKET_NAME
+          env:
+            - name: AWS_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_BUCKET_NAME
 
-        #     - name: AWS_BUCKET_REGION
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: my-secret
-        #           key: AWS_BUCKET_REGION
+            - name: AWS_BUCKET_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_BUCKET_REGION
 
-        #     - name: AWS_IAM_USER_SECRET
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: my-secret
-        #           key: AWS_IAM_USER_SECRET
+            - name: AWS_IAM_USER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_IAM_USER_SECRET
 
-        #     - name: AWS_IAM_USER_KEY
-        #       valueFrom:
-        #         secretKeyRef:
-        #           name: my-secret
-        #           key: AWS_IAM_USER_KEY
+            - name: AWS_IAM_USER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: my-secret
+                  key: AWS_IAM_USER_KEY
           ports:
             - containerPort: 4000
