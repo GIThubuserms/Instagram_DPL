@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: instanm
+  name: instasvc
+spec:
+    type: ClusterIP
+    selector:
+      app: insta
+    ports: 
+      - protocol: TCP
+        port: 4000
+        targetPort: 80

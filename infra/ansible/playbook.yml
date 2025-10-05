@@ -1,0 +1,100 @@
+- hosts: ubuntu
+  become: yes
+  tasks:
+    - name: Update system
+      apt:
+        update_cache: yes
+
+    - name: install docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Add current ansible user to docker group
+      user:
+        name: "{{ansible_user}}"
+        groups: docker
+        append: yes
+
+    - name: Start docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+# Jenkins and java install
+
+    - name: Install Java and Font config
+      apt:
+        name:
+          - fontconfig
+          - openjdk-21-jre
+        state: present
+
+    - name: Download jenkins key
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        dest: /etc/apt/keyrings/jenkins-keyring.asc
+        mode: "0644"
+
+    - name: Add Jenkins repository
+      apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
+        state: present
+        filename: jenkins
+
+    - name: Update apt cache after adding Jenkins repo
+      apt:
+        update_cache: yes
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    - name: Ensure Jenkins is started and enabled
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    # Installation of Kind
+
+    - name: Download kind
+      get_url:
+        url: "https://kind.sigs.k8s.io/dl/v0.29.0/kind-linux-amd64"
+        dest: /usr/local/bin/kind
+        mode: "0755"
+      when: ansible_architecture == "x86_64"
+
+    # Installation of Kubectl
+
+    - name: Get latest kubectl version
+      uri:
+        url: https://dl.k8s.io/release/stable.txt
+        return_content: yes
+      register: kubectl_version
+
+    - name: Download kubectl
+      get_url:
+        url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl"
+        dest: /usr/local/bin/kubectl
+        mode: "0755"
+      when: ansible_architecture == "x86_64"
+
+    - name: Ensure kubectl is executable
+      file:
+        path: /usr/local/bin/kubectl
+        mode: "0755"
+
+    # adding jenkins to docker group and restarting
+    - name: Add jenkins user to docker group
+      user:
+        name: jenkins
+        groups: docker
+        append: yes
+
+    - name: Restart Jenkins service
+      service:
+        name: jenkins
+        state: restarted

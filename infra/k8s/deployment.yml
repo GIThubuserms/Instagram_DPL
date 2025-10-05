@@ -1,0 +1,28 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata: 
+    namespace: instanm
+    name: instadpl
+spec:   
+    replicas: 2
+    selector:
+        matchLabels:
+            app: insta
+    template:
+        metadata:   
+            name: instapod
+            labels:  
+                app: insta
+        spec:
+            containers:
+                - name: instacon
+                  image: docker/murtaza0318/node:18
+                  envFrom:
+                    - configMapRef:
+                        name: my-config
+                    - secretRef:
+                        name: my-secret
+                  ports:
+                    - containerPort: 80
+                    
+    
